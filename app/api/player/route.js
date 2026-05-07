@@ -1,5 +1,5 @@
 const BUNDESLIGA_ID = 78;
-const CURRENT_SEASON = 2025;
+const DEFAULT_SEASON = 2024;
 
 export async function GET(request) {
   const key = process.env.API_FOOTBALL_KEY;
@@ -12,6 +12,8 @@ export async function GET(request) {
 
   const { searchParams } = new URL(request.url);
   const name = searchParams.get("name");
+  const season = searchParams.get("season") || DEFAULT_SEASON;
+  const league = searchParams.get("league") || BUNDESLIGA_ID;
 
   if (!name || name.length < 3) {
     return Response.json(
@@ -22,7 +24,7 @@ export async function GET(request) {
 
   const url = `https://v3.football.api-sports.io/players?search=${encodeURIComponent(
     name
-  )}&league=${BUNDESLIGA_ID}&season=${CURRENT_SEASON}`;
+  )}&league=${league}&season=${season}`;
 
   const res = await fetch(url, {
     headers: { "x-apisports-key": key },
